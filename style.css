@@ -1,0 +1,177 @@
+/* ── Reset & base ────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #04070f;
+  --surface:  #080f1c;
+  --border:   #122035;
+  --text:     #c8dff0;
+  --muted:    #4a6a8a;
+  --center:   #60efff;
+  --concept:  #7ec8e3;
+  --question: #f0a500;
+  --answer:   #4caf80;
+}
+
+html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); color:var(--text);
+  font-family: 'SF Mono', 'Fira Code', monospace; font-size:14px; }
+
+#app { width:100vw; height:100vh; position:relative; overflow:hidden; }
+
+.hidden { display:none !important; }
+
+/* ── Search screen ───────────────────────────────────────────────────────── */
+#search-screen {
+  display:flex; align-items:center; justify-content:center;
+  width:100%; height:100%;
+  background: radial-gradient(ellipse at 50% 40%, #08162a 0%, var(--bg) 70%);
+}
+
+.search-wrap { display:flex; flex-direction:column; align-items:center; gap:20px; width:min(560px, 90vw); }
+
+.brand {
+  display:flex; align-items:center; gap:10px;
+  font-size:2rem; font-weight:700; letter-spacing:2px; color:var(--center);
+  text-shadow: 0 0 30px #60efff55;
+}
+.brand-dot {
+  width:12px; height:12px; border-radius:50%;
+  background:var(--center); box-shadow:0 0 12px var(--center);
+}
+
+.tagline { color:var(--muted); font-size:0.82rem; letter-spacing:0.5px; }
+
+.search-row { display:flex; gap:10px; width:100%; }
+
+#search-input {
+  flex:1; padding:12px 16px; border-radius:8px;
+  background:var(--surface); border:1px solid var(--border);
+  color:var(--text); font-size:0.95rem; font-family:inherit;
+  outline:none; transition:border-color 0.2s;
+}
+#search-input:focus { border-color:var(--concept); }
+#search-input::placeholder { color:var(--muted); }
+
+#search-btn {
+  padding:12px 22px; border-radius:8px; border:none; cursor:pointer;
+  background:var(--concept); color:#04070f; font-weight:700;
+  font-family:inherit; font-size:0.9rem; letter-spacing:0.5px;
+  transition:opacity 0.15s;
+}
+#search-btn:hover { opacity:0.85; }
+
+.status-row { display:flex; align-items:center; gap:8px; }
+
+.status-dot {
+  width:7px; height:7px; border-radius:50%; background:var(--muted);
+  transition:background 0.3s;
+}
+.status-dot.on  { background:#4caf80; box-shadow:0 0 6px #4caf80; }
+.status-dot.err { background:#ef4444; box-shadow:0 0 6px #ef4444; }
+.status-label   { color:var(--muted); font-size:0.75rem; }
+
+.legend-hint { display:flex; gap:20px; }
+.lh-item     { font-size:0.75rem; color:var(--muted); }
+.concept-hint  { color:var(--concept); }
+.question-hint { color:var(--question); }
+.answer-hint   { color:var(--answer); }
+
+/* ── Graph screen ────────────────────────────────────────────────────────── */
+#graph-screen { position:relative; width:100%; height:100%; display:flex; flex-direction:column; }
+
+/* Toolbar */
+#toolbar {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 14px; background:var(--surface);
+  border-bottom:1px solid var(--border); flex-shrink:0; z-index:10;
+}
+
+.tb-btn {
+  padding:5px 12px; border-radius:6px; border:1px solid var(--border);
+  background:transparent; color:var(--muted); cursor:pointer; font-family:inherit;
+  font-size:0.8rem; transition:color 0.15s, border-color 0.15s;
+}
+.tb-btn:hover { color:var(--text); border-color:var(--concept); }
+
+.tb-topic { font-size:0.85rem; color:var(--center); font-weight:600; letter-spacing:0.5px; flex:1; }
+
+.tb-right { display:flex; align-items:center; gap:8px; margin-left:auto; }
+
+.node-counter { font-size:0.72rem; color:var(--muted); white-space:nowrap; }
+
+/* Progress bar */
+#build-progress {
+  display:flex; align-items:center; gap:12px;
+  padding:5px 14px; background:var(--surface);
+  border-bottom:1px solid var(--border); flex-shrink:0;
+  transition:opacity 0.5s;
+}
+#build-progress.done { opacity:0; pointer-events:none; }
+
+#build-bar {
+  height:3px; background:var(--concept); border-radius:2px;
+  transition:width 0.4s ease; width:0%; min-width:40px; flex-shrink:0;
+}
+#build-label { font-size:0.72rem; color:var(--muted); white-space:nowrap; overflow:hidden; }
+
+/* SVG canvas */
+#graph-svg { flex:1; width:100%; display:block; }
+
+/* Tooltip */
+#tooltip {
+  position:fixed; pointer-events:none; z-index:100;
+  background:#06111f; border:1px solid var(--border);
+  border-radius:8px; padding:9px 13px;
+  font-size:0.8rem; color:var(--text); max-width:240px;
+  opacity:0; transform:translateY(4px);
+  transition:opacity 0.15s, transform 0.15s;
+  line-height:1.5;
+}
+#tooltip.show { opacity:1; transform:translateY(0); }
+#tooltip strong { color:var(--center); }
+
+/* Graph legend */
+#graph-legend {
+  position:absolute; bottom:18px; left:16px;
+  display:flex; flex-direction:column; gap:7px;
+  background:#06111fcc; border:1px solid var(--border);
+  border-radius:8px; padding:10px 14px; z-index:10;
+  backdrop-filter:blur(6px);
+}
+.gl-item {
+  display:flex; align-items:center; gap:8px;
+  font-size:0.73rem; color:var(--muted);
+}
+.gl-hint { color:#2a4a6a; font-size:0.68rem; margin-left:2px; }
+.gl-shape {
+  display:inline-block; flex-shrink:0; border-width:1.5px; border-style:solid;
+}
+.circle-shape  { width:12px; height:12px; border-radius:50%; }
+.diamond-shape { width:10px; height:10px; transform:rotate(45deg); border-radius:1px; }
+.rect-shape    { width:16px; height:9px; border-radius:2px; border-style:dashed; }
+
+/* Header pill */
+#graph-header {
+  position:absolute; top:56px; left:50%; transform:translateX(-50%);
+  z-index:5; pointer-events:none;
+}
+#header-topic {
+  display:inline-block; padding:3px 14px; border-radius:20px;
+  background:#0a1e30; border:1px solid var(--border);
+  font-size:0.75rem; color:var(--muted); letter-spacing:0.5px;
+}
+
+/* ── D3 link styles ──────────────────────────────────────────────────────── */
+.graph-link { stroke:#1a3550; stroke-width:1.2; fill:none; transition:stroke 0.2s; }
+.graph-link.highlighted { stroke:#3a6a9a; stroke-width:2; }
+
+.graph-link-label { font-size:8.5px; fill:#2a4a6a; pointer-events:none; }
+
+/* ── Node types in SVG ───────────────────────────────────────────────────── */
+.graph-node { transition:opacity 0.3s; }
+.graph-node.selected .node-shape { stroke-width:2.5px !important; filter:url(#glow-selected) !important; }
+
+/* Question label text */
+.type-question .node-label { fill: var(--question); }
+/* Answer label text */
+.type-answer   .node-label { fill: #8ecfb0; font-size:8px; }

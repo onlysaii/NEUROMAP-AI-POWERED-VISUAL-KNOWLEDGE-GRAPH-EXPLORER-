@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NeuroMap</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ── Search screen ─────────────────────────────────────────────────── -->
+  <div id="search-screen">
+    <div class="search-wrap">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        NeuroMap
+      </div>
+      <p class="tagline">Enter any topic — explore it as a knowledge graph</p>
+      <div class="search-row">
+        <input id="search-input" type="text" placeholder="e.g. Photosynthesis, Quantum Mechanics, TCP/IP…" autocomplete="off"/>
+        <button id="search-btn">Map it</button>
+      </div>
+      <div class="status-row">
+        <span id="status-dot" class="status-dot"></span>
+        <span id="status-label" class="status-label">checking ollama...</span>
+      </div>
+      <div class="legend-hint">
+        <span class="lh-item concept-hint">● Concept</span>
+        <span class="lh-item question-hint">◆ Question</span>
+        <span class="lh-item answer-hint">▬ Answer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Graph screen ──────────────────────────────────────────────────── -->
+  <div id="graph-screen" class="hidden">
+
+    <!-- Toolbar -->
+    <div id="toolbar">
+      <button id="back-btn" class="tb-btn">← Back</button>
+      <span id="toolbar-topic" class="tb-topic"></span>
+      <div class="tb-right">
+        <button id="zoom-in-btn"    class="tb-btn">＋</button>
+        <button id="zoom-out-btn"   class="tb-btn">－</button>
+        <button id="zoom-reset-btn" class="tb-btn">⊙</button>
+        <button id="relayout-btn"   class="tb-btn">⟳</button>
+        <span id="node-counter" class="node-counter"></span>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div id="build-progress">
+      <div id="build-bar"></div>
+      <span id="build-label">Starting...</span>
+    </div>
+
+    <!-- Graph canvas -->
+    <svg id="graph-svg"></svg>
+
+    <!-- Tooltip -->
+    <div id="tooltip"></div>
+
+    <!-- Legend (static, always visible) -->
+    <div id="graph-legend">
+      <div class="gl-item"><span class="gl-shape circle-shape" style="background:#0a2a3a;border-color:#60efff"></span> Topic</div>
+      <div class="gl-item"><span class="gl-shape circle-shape" style="background:#0b1f2e;border-color:#7ec8e3"></span> Concept <span class="gl-hint">click to expand</span></div>
+      <div class="gl-item"><span class="gl-shape diamond-shape" style="background:#1e1500;border-color:#f0a500"></span> Question <span class="gl-hint">click for answer</span></div>
+      <div class="gl-item"><span class="gl-shape rect-shape" style="background:#051a10;border-color:#4caf80"></span> Answer <span class="gl-hint">dead end</span></div>
+    </div>
+
+    <!-- Header pill -->
+    <div id="graph-header">
+      <span id="header-topic"></span>
+    </div>
+
+  </div><!-- /graph-screen -->
+
+</div><!-- /app -->
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="/static/js/graph.js"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>
